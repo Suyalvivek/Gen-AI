@@ -45,7 +45,13 @@ export async function generate(userMessage,threadId){
                 role:'user',
                 content:userMessage,
             })
+            const MAX_RETRIES = 5;
+            let count = 0;
             while(true){
+                if(count>=MAX_RETRIES){
+                    return "Sorry, I'm unable to process your request at the moment.";}
+                
+            count++;
          const completion = await groq.chat.completions.create({
         temperature:0,
         model:"llama-3.3-70b-versatile",
