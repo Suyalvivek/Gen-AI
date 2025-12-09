@@ -4,6 +4,9 @@ const askBtn = document.querySelector('#ask')
 console.log(input);
 input.addEventListener('keyup',handleEnter);
 askBtn.addEventListener('click',handleAsk);
+const loading = document.createElement("div");
+loading.className=`my-6  max-w-fit animate-pulse`;
+loading.textContent="Typing....";
 async function generate(text){
     //append msg to ui
     const msg = document.createElement("div");
@@ -11,14 +14,17 @@ async function generate(text){
     msg.textContent=text;
     chatContainer?.appendChild(msg);
     input.value=''
+    chatContainer?.appendChild(loading);
     // send it to llm
     const assistantMessage = await callServer(text);
     console.log(assistantMessage);
     //apend assistant msg to ui
     const assistantMsg = document.createElement("div");
-    assistantMsg.className=`my-6 bg-neutral-800 p-3 rounded-xl mr-auto max-w-fit`
+    assistantMsg.className=` max-w-fit`
     assistantMsg.textContent=assistantMessage;
+    chatContainer?.removeChild(loading);
     chatContainer?.appendChild(assistantMsg);
+    
 }
 async function callServer(inputText) {
     const response = await fetch('http://localhost:3000/chat', {
